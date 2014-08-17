@@ -229,7 +229,7 @@ mean(steps.withoutNA.daily.total$steps)
 ```
 
 ```
-## [1] 10780
+## [1] 10799
 ```
 
 ```r
@@ -237,7 +237,7 @@ median(steps.withoutNA.daily.total$steps)
 ```
 
 ```
-## [1] 10731
+## [1] 11015
 ```
 
 Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
@@ -250,7 +250,7 @@ Let's look at the percentage change on the 2 numbers.
 ```
 
 ```
-## [1] 0.1244
+## [1] 0.3079
 ```
 
 ```r
@@ -258,10 +258,10 @@ Let's look at the percentage change on the 2 numbers.
 ```
 
 ```
-## [1] -0.3197
+## [1] 2.322
 ```
 
-**The filled dataset has the mean and median slightly changed. ** Sometimes there might be increase or decrease but either both numbers are increasing or both numbers are decreasing. After several runs the mean and median did not change in different directions. Moreover the changes are not significant. 
+**The filled dataset has the mean and median slightly changed. ** Sometimes there might be increase or decrease but the changes are not significant. 
 
 **Therefore the mising values did not pose significant impact on the dataset although there are quite a lot of them, providing the normal distribution assumption is fair. **
 
