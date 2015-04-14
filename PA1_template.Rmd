@@ -1,5 +1,11 @@
-Reproducible Research Peer Assessment 1
-========================================================
+---
+title: "Reproducible Research Peer Assessment 1"
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
+---
+========================================================  
 ## Introduction
 This assignment processes and interprets data collected from a personal activity monitoring device to discuss the pattern of the personal movement.
 
@@ -7,14 +13,29 @@ A group of enthusiasts who take measurements about themselves regularly to impro
 
 A device is deploted to collect the data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
 
-## Loading and preprocessing the data
+## Preparation
+### Setting up working environment
+
+* Woking Directory  
+A directory named 'repdata' is built as the main working directory of this course. In addition, a subdirectory with the name 'RepData_PeerAssessment1' is cloned from Github ('relebatnebon/RepData_PeerAssessment1'), which corresponds to this assignment.
+
+* Software Packages
+To finish the project, a couple of software needs to be installed.   
+-- R Version 3.1.3 64bit  
+-- RStudio Version 0.98.1102  
+-- notepad++ Version 6.7.4  
+The following packages in R are expected to be used:  
+-- knitr - markdown tools  
+-- ggplot2  
+
+### Loading and preprocessing the data
 
 Load the data
 
 The original data is assumed to be placed in the working directory.
 (Source:https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip)
 
-```{r}
+```{r checkDataFile}
 if (!file.exists("activity.csv")) {
   if (!file.exists("activity.zip")) {
     ## warn the missing file
@@ -28,7 +49,7 @@ if (!file.exists("activity.csv")) {
 
 Specify the data type and read the data
 
-```{r}
+```{r loadData}
 library(methods)
 ## set the data type of date
 setClass("thisDate")
@@ -44,13 +65,13 @@ For this part of the assignment, the missing values in the dataset are ignored.
 
 Make a histogram of the total number of steps taken each day
 
-```{r}
+```{r stepsEachDay}
 ## get total number of steps taken each day
 steps.daily.total <- aggregate(steps ~ date, data = activity.withNA,
   FUN = sum)
 
 ## make the histogram
-hist(steps.daily.total$steps, col="orange",
+hist(steps.daily.total$steps, col="red",
 	breaks=seq(0,10*ceiling(max(steps.daily.total$steps)/10),l=30),
 	main="Histogram showing the total number of steps taken each day",
 	xlab = "Total steps each day", ylab = "Frequency")
@@ -60,18 +81,19 @@ hist(steps.daily.total$steps, col="orange",
 
 Calculate and report the mean and median total number of steps taken per day.
 
-```{r}
-mean(steps.daily.total$steps)
-median(steps.daily.total$steps)
+```{r meanHist}
+avgSteps <- mean(steps.daily.total$steps)
+midianSteps <- median(steps.daily.total$steps)
+avgSteps; midianSteps
 ```
 
-**The average number of total steps and the most frequent number of total steps are close to each other. It is the mostly likely for the participants to take this amount of steps every day. It may suggest the total number of steps that the participants usually take is predictable. **
+**The average number of total steps `r avgSteps` and the most frequent number of total steps `r midianSteps` are close to each other. It is the mostly likely for the participants to take this amount of steps every day. It may suggest the total number of steps that the participants usually take is predictable. **
 
 ## What is the average daily activity pattern?
 
-Make a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
+Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
 
-```{r}
+```{r intervalPlot}
 ## get the average number of steps taken for each interval
 steps.intervally.mean <- aggregate(steps ~ interval, 
   data = activity.withNA, FUN = mean)
@@ -86,7 +108,7 @@ plot(steps.intervally.mean$interval, steps.intervally.mean$steps, type='l',
 
 Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{r}
+```{r maxInterval}
 ## get the interval
 intervally.max <-steps.intervally.mean$interval[which.max(steps.intervally.mean$steps)]/100
 
@@ -103,13 +125,13 @@ Note that there are a number of days/intervals where there are missing values (c
 
 Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs).
 
-```{r}
+```{r sumNAs}
 sum(is.na(activity.withNA$steps))
 ```
 
 **It gives the missing values in the steps column. **
 
-```{r}
+```{r rateNAs}
 100*sum(is.na(activity.withNA$steps))/nrow(activity.withNA)
 ```
 
@@ -129,7 +151,7 @@ As the personal movement data shows a reasonable possibility in a general daily 
 
 Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
-```{r}
+```{r fillNAs}
 ## get the standard deviations
 steps.intervally.stddev <- aggregate(steps ~ interval, 
   data = activity.withNA, FUN = sd)
@@ -158,7 +180,7 @@ for (i in 1:nrow(activity.withoutNA)){
 
 Make a histogram of the total number of steps taken each day
 
-```{r}
+```{r meanHistWithoutNA}
 ## get the total number of steps each day in the filled dataset
 steps.withoutNA.daily.total <- aggregate(steps ~ date, data = activity.withoutNA,
 	FUN = sum)
@@ -166,7 +188,7 @@ steps.withoutNA.daily.total <- aggregate(steps ~ date, data = activity.withoutNA
 ## make the histogram
 hist(steps.withoutNA.daily.total$steps, col="orange",
 	breaks=seq(0,10*ceiling(max(steps.withoutNA.daily.total$steps)/10),l=30),
-	main="Histogram showing the total number of steps taken each day",
+	main="Histogram showing the total number of steps taken each day w/o NAs",
 	xlab = "Total steps each day", ylab = "Frequency")
 ```
 
@@ -194,9 +216,9 @@ Let's look at the percentage change on the 2 numbers.
 
 The dataset with the filled-in missing values is used for this part.
 
-Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+Create a new factor variable in the dataset with two levels "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
-```{r}
+```{r splitWeekend}
 ## get day of the week
 activity.withoutNA$weekday <- as.POSIXlt(activity.withoutNA$date)$wday
 
@@ -209,7 +231,7 @@ for (i in 1:nrow(activity.withoutNA)){
   }
 ```
 
-Make a panel plot containing a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+Make a panel plot containing a time series plot (i.e. type = 'l') of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
 ```{r}
 ## set the variable as factor

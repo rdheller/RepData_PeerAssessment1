@@ -1,5 +1,5 @@
-Reproducible Research Peer Assessment 1
-========================================================
+# Reproducible Research Peer Assessment 1
+========================================================  
 ## Introduction
 This assignment processes and interprets data collected from a personal activity monitoring device to discuss the pattern of the personal movement.
 
@@ -7,7 +7,22 @@ A group of enthusiasts who take measurements about themselves regularly to impro
 
 A device is deploted to collect the data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
 
-## Loading and preprocessing the data
+## Preparation
+### Setting up working environment
+
+* Woking Directory  
+A directory named 'repdata' is built as the main working directory of this course. In addition, a subdirectory with the name 'RepData_PeerAssessment1' is cloned from Github ('relebatnebon/RepData_PeerAssessment1'), which corresponds to this assignment.
+
+* Software Packages
+To finish the project, a couple of software needs to be installed.   
+-- R Version 3.1.3 64bit  
+-- RStudio Version 0.98.1102  
+-- notepad++ Version 6.7.4  
+The following packages in R are expected to be used:  
+-- knitr - markdown tools  
+-- ggplot2  
+
+### Loading and preprocessing the data
 
 Load the data
 
@@ -53,13 +68,13 @@ steps.daily.total <- aggregate(steps ~ date, data = activity.withNA,
   FUN = sum)
 
 ## make the histogram
-hist(steps.daily.total$steps, col="orange",
+hist(steps.daily.total$steps, col="red",
 	breaks=seq(0,10*ceiling(max(steps.daily.total$steps)/10),l=30),
 	main="Histogram showing the total number of steps taken each day",
 	xlab = "Total steps each day", ylab = "Frequency")
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
+![](PA1_template_files/figure-html/stepsEachDay-1.png) 
 
 **The participants most likely took around 9,300 to 13,000 steps every day. The personal movement behaviour shows trends to be normally distributed. **
 
@@ -67,26 +82,24 @@ Calculate and report the mean and median total number of steps taken per day.
 
 
 ```r
-mean(steps.daily.total$steps)
+avgSteps <- mean(steps.daily.total$steps)
+midianSteps <- median(steps.daily.total$steps)
+avgSteps; midianSteps
 ```
 
 ```
-## [1] 10766
-```
-
-```r
-median(steps.daily.total$steps)
+## [1] 10766.19
 ```
 
 ```
 ## [1] 10765
 ```
 
-**The average number of total steps and the most frequent number of total steps are close to each other. It is the mostly likely for the participants to take this amount of steps every day. It may suggest the total number of steps that the participants usually take is predictable. **
+**The average number of total steps 1.0766189\times 10^{4} and the most frequent number of total steps 1.0765\times 10^{4} are close to each other. It is the mostly likely for the participants to take this amount of steps every day. It may suggest the total number of steps that the participants usually take is predictable. **
 
 ## What is the average daily activity pattern?
 
-Make a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
+Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
 
 
 ```r
@@ -100,7 +113,7 @@ plot(steps.intervally.mean$interval, steps.intervally.mean$steps, type='l',
 	xlab = "Time of a day", ylab = "Average number of steps")
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
+![](PA1_template_files/figure-html/intervalPlot-1.png) 
 
 **The major troughs fit into general meal times and rest times, which are sleeping time, breakfast, lunch, afternoon break, and dinner. The daily activity pattern of the participants looks understandable. **
 
@@ -145,7 +158,7 @@ sum(is.na(activity.withNA$steps))
 ```
 
 ```
-## [1] 13.11
+## [1] 13.11475
 ```
 
 **It gives the portion of the missing values in the steps column. The number of the missing value is significantly large.**
@@ -158,13 +171,13 @@ summary(activity.withNA)
 ```
 
 ```
-##      steps            date               interval   
-##  Min.   :  0.0   Min.   :2012-10-01   Min.   :   0  
-##  1st Qu.:  0.0   1st Qu.:2012-10-16   1st Qu.: 589  
-##  Median :  0.0   Median :2012-10-31   Median :1178  
-##  Mean   : 37.4   Mean   :2012-10-31   Mean   :1178  
-##  3rd Qu.: 12.0   3rd Qu.:2012-11-15   3rd Qu.:1766  
-##  Max.   :806.0   Max.   :2012-11-30   Max.   :2355  
+##      steps             date               interval     
+##  Min.   :  0.00   Min.   :2012-10-01   Min.   :   0.0  
+##  1st Qu.:  0.00   1st Qu.:2012-10-16   1st Qu.: 588.8  
+##  Median :  0.00   Median :2012-10-31   Median :1177.5  
+##  Mean   : 37.38   Mean   :2012-10-31   Mean   :1177.5  
+##  3rd Qu.: 12.00   3rd Qu.:2012-11-15   3rd Qu.:1766.2  
+##  Max.   :806.00   Max.   :2012-11-30   Max.   :2355.0  
 ##  NA's   :2304
 ```
 
@@ -215,11 +228,11 @@ steps.withoutNA.daily.total <- aggregate(steps ~ date, data = activity.withoutNA
 ## make the histogram
 hist(steps.withoutNA.daily.total$steps, col="orange",
 	breaks=seq(0,10*ceiling(max(steps.withoutNA.daily.total$steps)/10),l=30),
-	main="Histogram showing the total number of steps taken each day",
+	main="Histogram showing the total number of steps taken each day w/o NAs",
 	xlab = "Total steps each day", ylab = "Frequency")
 ```
 
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11.png) 
+![](PA1_template_files/figure-html/meanHistWithoutNA-1.png) 
 
 Calculate and report the mean and median total number of steps taken per day.
 
@@ -229,7 +242,7 @@ mean(steps.withoutNA.daily.total$steps)
 ```
 
 ```
-## [1] 10799
+## [1] 10835.94
 ```
 
 ```r
@@ -250,7 +263,7 @@ Let's look at the percentage change on the 2 numbers.
 ```
 
 ```
-## [1] 0.3079
+## [1] 0.6479049
 ```
 
 ```r
@@ -258,7 +271,7 @@ Let's look at the percentage change on the 2 numbers.
 ```
 
 ```
-## [1] 2.322
+## [1] 2.322341
 ```
 
 **The filled dataset has the mean and median slightly changed. ** Sometimes there might be increase or decrease but the changes are not significant. 
@@ -269,7 +282,7 @@ Let's look at the percentage change on the 2 numbers.
 
 The dataset with the filled-in missing values is used for this part.
 
-Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+Create a new factor variable in the dataset with two levels "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
 
 ```r
@@ -285,7 +298,7 @@ for (i in 1:nrow(activity.withoutNA)){
   }
 ```
 
-Make a panel plot containing a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+Make a panel plot containing a time series plot (i.e. type = 'l') of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
 
 ```r
@@ -298,19 +311,12 @@ steps.withoutNA.intervally.mean <- aggregate(steps ~ interval + dayofweek,
 
 ## make the plot
 library(ggplot2)
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 3.1.1
-```
-
-```r
 qplot(interval, steps, data=steps.withoutNA.intervally.mean, geom=c("line"), 
   main="Time series plot showing average daily activity pattern",
 	xlab = "Time of a day in weekdays", ylab = "Average number of steps") + facet_wrap(~ dayofweek, ncol=1)
 ```
 
-![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
 During weekdays, ** the peaks and troughs are sharp **. The participants moved the most in the morning. The movement level was almost one third during the other peak intervals. ** The major troughs demonstrated a strong fit to general meal times and rest times. **
 
